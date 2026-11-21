@@ -76,6 +76,7 @@ export function createApp(cfg: Config): { server: Server; metrics: Metrics } {
   const mcp = toNodeHandler(handler, { maxRequestBodySize: MAX_REQUEST_BYTES });
 
   const json = (res: ServerResponse, status: number, body: object) => {
+    if (status === 401) res.setHeader("WWW-Authenticate", 'Bearer error="invalid_token"');
     res.writeHead(status, { "Content-Type": "application/json" }).end(JSON.stringify(body));
   };
 

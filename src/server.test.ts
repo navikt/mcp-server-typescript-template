@@ -52,6 +52,11 @@ describe("inbound token validation", () => {
     expect((await post("{}", token)).status).toBe(status);
   });
 
+  it("challenges 401 with invalid_token", async () => {
+    const { post } = setup(user);
+    expect((await post("{}", null)).headers.get("www-authenticate")).toBe('Bearer error="invalid_token"');
+  });
+
   it("fails closed without gateway client ID", async () => {
     const { post } = setup(user, { gatewayClientId: "" });
     expect((await post("{}")).status).toBe(503);
