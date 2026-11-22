@@ -31,11 +31,11 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
-        with:
-          go-version: "1.26"
-          cache: false
       - run: pnpm install --frozen-lockfile
-      - run: GOBIN="$RUNNER_TEMP/bin" go install github.com/navikt/copilot/cli/mcp-compliance@221f469b8e9fdb248ab59c959f4b4840941a49f1
       # Fake Texas (scripts/fake-texas.mjs) runs only here; the server is unchanged.
-      - run: scripts/compliance.sh "$RUNNER_TEMP/bin/mcp-compliance"
+      - run: scripts/compliance.sh
+      - uses: navikt/copilot/cli/mcp-compliance@cli/mcp-compliance/v0.2.0
+        with:
+          url: http://127.0.0.1:8098/
+          token: ci-user-token
+          app-token: ci-app-token
